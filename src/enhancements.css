@@ -1,0 +1,328 @@
+/* تحسينات إضافية للصفحة الرئيسية - المحلل الذكي للنحو الوظيفي */
+
+/* تحسين الخطوط العربية */
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+
+/* متغيرات الألوان المحسنة */
+:root {
+  --primary-gold: #FFD700;
+  --primary-blue: #1B4E65;
+  --secondary-blue: #2E6A84;
+  --accent-orange: #FF6B35;
+  --accent-green: #28A745;
+  --accent-purple: #6F42C1;
+  --accent-teal: #20C997;
+  
+  --gradient-primary: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-orange) 100%);
+  --gradient-secondary: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-teal) 100%);
+  
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 20px rgba(255, 215, 0, 0.3);
+  
+  --border-radius-small: 12px;
+  --border-radius-medium: 20px;
+  --border-radius-large: 24px;
+  
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* تحسين الأداء العام */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Tajawal', 'Cairo', 'Arial', sans-serif;
+  direction: rtl;
+  text-align: right;
+  overflow-x: hidden;
+}
+
+/* تحسين الرسوم المتحركة */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes floatUp {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* تحسين المكونات الشائعة */
+.enhanced-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 215, 0, 0.2);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-medium);
+  transition: var(--transition-slow);
+  position: relative;
+  overflow: hidden;
+}
+
+.enhanced-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-heavy), var(--shadow-glow);
+  border-color: rgba(255, 215, 0, 0.6);
+}
+
+.enhanced-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
+}
+
+.enhanced-button {
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 700;
+  padding: 12px 32px;
+  cursor: pointer;
+  transition: var(--transition-medium);
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.enhanced-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-heavy), var(--shadow-glow);
+}
+
+.enhanced-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.enhanced-button:hover::before {
+  left: 100%;
+}
+
+.enhanced-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: var(--gradient-secondary);
+  border-radius: 50%;
+  color: white;
+  font-size: 1.8rem;
+  box-shadow: var(--shadow-medium);
+  transition: var(--transition-medium);
+}
+
+.enhanced-icon:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: var(--shadow-heavy);
+  background: var(--gradient-primary);
+}
+
+/* تحسين النصوص العربية */
+.arabic-text {
+  font-family: 'Amiri', 'Tajawal', serif;
+  line-height: 1.8;
+  text-align: right;
+  direction: rtl;
+}
+
+.arabic-title {
+  font-family: 'Tajawal', 'Cairo', sans-serif;
+  font-weight: 800;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
+/* تحسين الاستجابة */
+@media (max-width: 1200px) {
+  .enhanced-card {
+    padding: 20px;
+  }
+  
+  .enhanced-icon {
+    width: 55px;
+    height: 55px;
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .enhanced-card {
+    padding: 16px;
+    border-radius: var(--border-radius-medium);
+  }
+  
+  .enhanced-button {
+    padding: 10px 24px;
+    font-size: 0.9rem;
+  }
+  
+  .enhanced-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .enhanced-card {
+    padding: 12px;
+    border-radius: var(--border-radius-small);
+  }
+  
+  .enhanced-button {
+    padding: 8px 20px;
+    font-size: 0.85rem;
+  }
+  
+  .enhanced-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+}
+
+/* تحسين إمكانية الوصول */
+.enhanced-card:focus-visible,
+.enhanced-button:focus-visible {
+  outline: 3px solid var(--primary-gold);
+  outline-offset: 2px;
+}
+
+/* تحسين الأداء للرسوم المتحركة */
+.enhanced-card,
+.enhanced-button,
+.enhanced-icon {
+  will-change: transform;
+}
+
+/* تحسين البطاقات للأجهزة اللمسية */
+@media (hover: none) and (pointer: coarse) {
+  .enhanced-card:active {
+    transform: scale(0.98);
+  }
+  
+  .enhanced-button:active {
+    transform: scale(0.95);
+  }
+}
+
+/* إضافة تأثيرات بصرية للعناصر المتحركة */
+.floating-element {
+  animation: floatUp 3s ease-in-out infinite;
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
+  animation: shimmer 2s infinite;
+}
+
+/* تحسين التمرير */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gradient-secondary);
+}
+
+/* إضافة المزيد من التحسينات البصرية */
+.glow-effect {
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+}
+
+.backdrop-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
