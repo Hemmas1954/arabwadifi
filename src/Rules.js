@@ -13,11 +13,18 @@ import {
   AccordionSummary,
   AccordionDetails,
   Fade,
-  Chip
+  Chip,
+  Button,
+  Grid,
+  Divider
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
+import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -187,15 +194,143 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     fontSize: '1.1rem',
     boxShadow: '0 4px 12px rgba(212, 165, 116, 0.3)',
-  }
+  },
+  sourcesSection: {
+    background: 'rgba(255, 255, 255, 0.95)',
+    backdropFilter: 'blur(15px)',
+    borderRadius: 16,
+    marginBottom: theme.spacing(4),
+    border: '1px solid rgba(255, 255, 255, 0.2)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+    overflow: 'hidden',
+  },
+  sourcesHeader: {
+    background: 'linear-gradient(135deg, #28A745 0%, #20C997 100%)',
+    color: 'white',
+    padding: theme.spacing(3),
+    display: 'flex',
+    alignItems: 'center',
+  },
+  sourcesTitle: {
+    fontSize: '1.5rem',
+    fontWeight: 700,
+    fontFamily: '"Tajawal", "Cairo", sans-serif',
+    textShadow: '1px 1px 2px rgba(0,0,0,0.2)',
+    flex: 1,
+  },
+  sourcesContent: {
+    padding: theme.spacing(3),
+  },
+  pdfCard: {
+    background: 'rgba(40, 167, 69, 0.05)',
+    border: '2px solid rgba(40, 167, 69, 0.2)',
+    borderRadius: 12,
+    padding: theme.spacing(2),
+    margin: theme.spacing(1, 0),
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      background: 'rgba(40, 167, 69, 0.1)',
+      border: '2px solid rgba(40, 167, 69, 0.4)',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)',
+    },
+  },
+  pdfInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing(1),
+  },
+  pdfName: {
+    fontWeight: 600,
+    color: '#28A745',
+    fontSize: '1.1rem',
+    fontFamily: '"Tajawal", "Cairo", sans-serif',
+  },
+  pdfDescription: {
+    color: '#666',
+    fontSize: '0.9rem',
+    fontFamily: '"Tajawal", "Cairo", sans-serif',
+    marginTop: theme.spacing(1),
+  },
+  uploadButton: {
+    background: 'linear-gradient(135deg, #007BFF 0%, #0056B3 100%)',
+    color: 'white',
+    padding: theme.spacing(1.5, 3),
+    borderRadius: 8,
+    fontFamily: '"Tajawal", "Cairo", sans-serif',
+    fontWeight: 600,
+    '&:hover': {
+      background: 'linear-gradient(135deg, #0056B3 0%, #004085 100%)',
+    },
+  },
+  downloadButton: {
+    background: 'linear-gradient(135deg, #28A745 0%, #20C997 100%)',
+    color: 'white',
+    padding: theme.spacing(1, 2),
+    borderRadius: 6,
+    minWidth: 'auto',
+    '&:hover': {
+      background: 'linear-gradient(135deg, #20C997 0%, #17A2B8 100%)',
+    },
+  },
+  hiddenInput: {
+    display: 'none',
+  },
 }));
 
 const Rules = () => {
   const classes = useStyles();
   const history = useNavigate();
+  const [expandedPanel, setExpandedPanel] = useState(false);
+  const [pdfFiles, setPdfFiles] = useState([
+    {
+      id: 1,
+      name: 'قواعد النحو العربي الأساسية',
+      description: 'دليل شامل لقواعد النحو العربي مع أمثلة تطبيقية',
+      url: null,
+      uploaded: false
+    },
+    {
+      id: 2,
+      name: 'قواعد الإعراب والصرف',
+      description: 'مرجع متقدم في قواعد الإعراب والصرف العربي',
+      url: null,
+      uploaded: false
+    }
+  ]);
 
   const handleBack = (page) => {
     history(`/${page}`);
+  };
+
+  const handlePanelChange = (panel) => (event, isExpanded) => {
+    setExpandedPanel(isExpanded ? panel : false);
+  };
+
+  const handleFileUpload = (fileId) => (event) => {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/pdf') {
+      const fileUrl = URL.createObjectURL(file);
+      setPdfFiles(prevFiles => 
+        prevFiles.map(pdfFile => 
+          pdfFile.id === fileId 
+            ? { ...pdfFile, url: fileUrl, uploaded: true, fileName: file.name }
+            : pdfFile
+        )
+      );
+    } else {
+      alert('يرجى اختيار ملف PDF صالح');
+    }
+  };
+
+  const handleDownload = (url, fileName) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName || 'document.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const rulesData = [
@@ -295,6 +430,103 @@ const Rules = () => {
             قواعد النحو الوظيفي
           </Typography>
         </Fade>
+
+        {/* قسم المصادر PDF */}
+        <Fade in={true} timeout={1100}>
+          <Box className={classes.sourcesSection}>
+            <Box className={classes.sourcesHeader}>
+              <LibraryBooksIcon style={{ marginLeft: 12, fontSize: '2rem' }} />
+              <Typography className={classes.sourcesTitle}>
+                مصادر القواعد النحوية
+              </Typography>
+            </Box>
+            <Box className={classes.sourcesContent}>
+              <Typography 
+                variant="body1" 
+                style={{ 
+                  marginBottom: 24, 
+                  color: '#666',
+                  fontFamily: '"Tajawal", "Cairo", sans-serif',
+                  textAlign: 'center'
+                }}
+                dir="rtl"
+              >
+                يمكنك رفع ملفات PDF كمصادر مرجعية لقواعد النحو العربي
+              </Typography>
+              
+              <Grid container spacing={3}>
+                {pdfFiles.map((pdfFile) => (
+                  <Grid item xs={12} md={6} key={pdfFile.id}>
+                    <Box className={classes.pdfCard}>
+                      <Box className={classes.pdfInfo}>
+                        <Box style={{ display: 'flex', alignItems: 'center' }}>
+                          <PictureAsPdfIcon 
+                            style={{ 
+                              color: '#28A745', 
+                              marginLeft: 8, 
+                              fontSize: '1.5rem' 
+                            }} 
+                          />
+                          <Typography className={classes.pdfName} dir="rtl">
+                            {pdfFile.name}
+                          </Typography>
+                        </Box>
+                        {pdfFile.uploaded && (
+                          <Button
+                            className={classes.downloadButton}
+                            onClick={() => handleDownload(pdfFile.url, pdfFile.fileName)}
+                            startIcon={<GetAppIcon />}
+                            size="small"
+                          >
+                            تحميل
+                          </Button>
+                        )}
+                      </Box>
+                      
+                      <Typography className={classes.pdfDescription} dir="rtl">
+                        {pdfFile.description}
+                      </Typography>
+                      
+                      {!pdfFile.uploaded ? (
+                        <Box style={{ marginTop: 16, textAlign: 'center' }}>
+                          <input
+                            accept="application/pdf"
+                            className={classes.hiddenInput}
+                            id={`pdf-upload-${pdfFile.id}`}
+                            type="file"
+                            onChange={handleFileUpload(pdfFile.id)}
+                          />
+                          <label htmlFor={`pdf-upload-${pdfFile.id}`}>
+                            <Button
+                              variant="contained"
+                              component="span"
+                              className={classes.uploadButton}
+                              startIcon={<CloudUploadIcon />}
+                            >
+                              رفع ملف PDF
+                            </Button>
+                          </label>
+                        </Box>
+                      ) : (
+                        <Box style={{ 
+                          marginTop: 16, 
+                          textAlign: 'center',
+                          color: '#28A745',
+                          fontWeight: 600,
+                          fontFamily: '"Tajawal", "Cairo", sans-serif'
+                        }}>
+                          ✓ تم رفع الملف بنجاح
+                        </Box>
+                      )}
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+          </Box>
+        </Fade>
+
+        <Divider style={{ margin: '32px 0', background: 'rgba(255,255,255,0.3)' }} />
 
         {/* الاختصارات */}
         <Fade in={true} timeout={1200}>
