@@ -283,20 +283,22 @@ const Rules = () => {
   const classes = useStyles();
   const history = useNavigate();
   const [expandedPanel, setExpandedPanel] = useState(false);
-  const [pdfFiles, setPdfFiles] = useState([
+  const [pdfFiles] = useState([
     {
       id: 1,
       name: 'قواعد النحو العربي الأساسية',
       description: 'دليل شامل لقواعد النحو العربي مع أمثلة تطبيقية',
-      url: null,
-      uploaded: false
+      fileName: '1.pdf',
+      url: '/1.pdf',
+      uploaded: true
     },
     {
       id: 2,
       name: 'قواعد الإعراب والصرف',
       description: 'مرجع متقدم في قواعد الإعراب والصرف العربي',
-      url: null,
-      uploaded: false
+      fileName: '2.pdf',
+      url: '/2.pdf',
+      uploaded: true
     }
   ]);
 
@@ -308,26 +310,13 @@ const Rules = () => {
     setExpandedPanel(isExpanded ? panel : false);
   };
 
-  const handleFileUpload = (fileId) => (event) => {
-    const file = event.target.files[0];
-    if (file && file.type === 'application/pdf') {
-      const fileUrl = URL.createObjectURL(file);
-      setPdfFiles(prevFiles => 
-        prevFiles.map(pdfFile => 
-          pdfFile.id === fileId 
-            ? { ...pdfFile, url: fileUrl, uploaded: true, fileName: file.name }
-            : pdfFile
-        )
-      );
-    } else {
-      alert('يرجى اختيار ملف PDF صالح');
-    }
-  };
+
 
   const handleDownload = (url, fileName) => {
     const link = document.createElement('a');
     link.href = url;
     link.download = fileName || 'document.pdf';
+    link.target = '_blank';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -451,7 +440,7 @@ const Rules = () => {
                 }}
                 dir="rtl"
               >
-                يمكنك رفع ملفات PDF كمصادر مرجعية لقواعد النحو العربي
+                مصادر مرجعية لقواعد النحو العربي متوفرة للتحميل والمراجعة
               </Typography>
               
               <Grid container spacing={3}>
@@ -484,40 +473,18 @@ const Rules = () => {
                       </Box>
                       
                       <Typography className={classes.pdfDescription} dir="rtl">
-                        {pdfFile.description}
-                      </Typography>
-                      
-                      {!pdfFile.uploaded ? (
-                        <Box style={{ marginTop: 16, textAlign: 'center' }}>
-                          <input
-                            accept="application/pdf"
-                            className={classes.hiddenInput}
-                            id={`pdf-upload-${pdfFile.id}`}
-                            type="file"
-                            onChange={handleFileUpload(pdfFile.id)}
-                          />
-                          <label htmlFor={`pdf-upload-${pdfFile.id}`}>
-                            <Button
-                              variant="contained"
-                              component="span"
-                              className={classes.uploadButton}
-                              startIcon={<CloudUploadIcon />}
-                            >
-                              رفع ملف PDF
-                            </Button>
-                          </label>
-                        </Box>
-                      ) : (
-                        <Box style={{ 
-                          marginTop: 16, 
-                          textAlign: 'center',
-                          color: '#28A745',
-                          fontWeight: 600,
-                          fontFamily: '"Tajawal", "Cairo", sans-serif'
-                        }}>
-                          ✓ تم رفع الملف بنجاح
-                        </Box>
-                      )}
+                         {pdfFile.description}
+                       </Typography>
+                       
+                       <Box style={{ 
+                         marginTop: 16, 
+                         textAlign: 'center',
+                         color: '#28A745',
+                         fontWeight: 600,
+                         fontFamily: '"Tajawal", "Cairo", sans-serif'
+                       }}>
+                         ✓ ملف PDF متوفر للتحميل
+                       </Box>
                     </Box>
                   </Grid>
                 ))}
